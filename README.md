@@ -1,13 +1,13 @@
 # Markdown Localization Manager
-Based on the [Markdown L10N Specification](https://github.com/markdown-l10n/markdown-l10n-spec)
+Minimal reference implenentation based on the [Markdown L10N Specification](https://github.com/markdown-l10n/markdown-l10n-spec)
 
 # Installing and Updating
 To install or update mdlm, you should run the install script. To do that, you may either download and run the script manually, or use the following cURL or Wget command:
 ```sh
-curl -o- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.2/install.sh | bash
 ```
 ```sh
-wget -qO- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.1/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.2/install.sh | bash
 ```
 Running either of the above commands downloads a script and runs it. The script copies mdlm script to `~/.mdlm`, and attempts to add the source lines from the snippet below to the correct profile file (`~/.bash_profile`, or `~/.bashrc`).
 

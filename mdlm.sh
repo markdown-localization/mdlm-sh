@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.1"
+MDLM_VERSION="0.0.2"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
@@ -499,7 +499,7 @@ mdlm_status() {
         LOCALE_NAME="$(mdlm_list_locales "^${NEXT_LOCALE}[|]" | head -n 1 | awk '{print $2}' | sed -e 's/[()]//g')"
         
         # TODO: replace l10n hardcode with variable.
-        OUTDATED_SECTIONS=$(diff --color -B <(grep -v "@l10n:h" "${MD_FILE_LOCALE}" | sed -e '/@l10n:p -->/,/<!-- @l10n:p/d' -e '/<!-- @l10n:p/d') <(grep -v "${MDLM_HEADER}" "${MD_FILE}") | grep -v -e "[-<>]" | wc -l)
+        OUTDATED_SECTIONS=$(diff --color -B <(grep -v "<!--[\ ]*@l10n:h[\ ]*-->" "${MD_FILE_LOCALE}" | sed -e '/@l10n:p -->/,/<!-- @l10n:p/d' -e '/<!-- @l10n:p/d') <(grep -v "${MDLM_HEADER}" "${MD_FILE}") | grep -v -e "[-<>]" | wc -l)
         if [ $OUTDATED_SECTIONS -gt 0 ]
         then
           STATUS="${red}outdated.${normal}"
@@ -511,7 +511,7 @@ mdlm_status() {
         if [ ${SHOW_DIFF} -eq 1 ]
         then
         # TODO: replace l10n hardcode with variable.
-          command diff --color -B <(grep -v "@l10n:h" "${MD_FILE_LOCALE}" | sed -e '/@l10n:p -->/,/<!-- @l10n:p/d' -e '/<!-- @l10n:p/d') <(grep -v "${MDLM_HEADER}" "${MD_FILE}")
+          command diff --color -B <(grep -v "<!--[\ ]*@l10n:h[\ ]*-->" "${MD_FILE_LOCALE}" | sed -e '/@l10n:p -->/,/<!-- @l10n:p/d' -e '/<!-- @l10n:p/d') <(grep -v "${MDLM_HEADER}" "${MD_FILE}")
           mdlm_echo
         fi
       done
@@ -529,7 +529,7 @@ mdlm_help() {
   mdlm_echo "  mdlm ls [<pattern>]       List all available locales, matching a given <pattern> if provided"
   mdlm_echo "  mdlm add <locale>         Create localization files for given <locale>"
   mdlm_echo "  mdlm rm <locale>          Remove all localization files for given <locale>"
-  mdlm_echo "  mdlm status [<locale>]    Synchronization status between original and localized versions, for a given <locale> if provided"
+  mdlm_echo "  mdlm status [<locale>]    Check synchronization status between original and localized versions, for a given <locale> if provided"
   mdlm_echo "    --diff                  Shows diff, if available."
 }
 
