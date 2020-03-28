@@ -4,10 +4,10 @@ Minimal reference implenentation based on the [Markdown L10N Specification](http
 # Installing and Updating
 To install or update mdlm, you should run the install script. To do that, you may either download and run the script manually, or use the following cURL or Wget command:
 ```sh
-curl -o- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.3/install.sh | bash
 ```
 ```sh
-wget -qO- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.2/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.3/install.sh | bash
 ```
 Running either of the above commands downloads a script and runs it. The script copies mdlm script to `~/.mdlm`, and attempts to add the source lines from the snippet below to the correct profile file (`~/.bash_profile`, or `~/.bashrc`).
 
@@ -20,13 +20,16 @@ alias mdlm='$MDLM_DIR/mdlm.sh'
 ## List all available locales
 ```
 $ mdlm ls
-aa (aa) - Afar
-ab (ab) - Abkhazian
-ae (ae) - Avestan
-af (af) - Afrikaans
-ak (ak) - Akan
-am (am) - Amharic
-an (an) - Aragonese
+aa (Afaraf) - Afar
+ab (Аҧсуа) - Abkhazian
+ae (Avesta) - Avestan
+af (Afrikaans) - Afrikaans
+ak (Akan) - Akan
+am (አማርኛ) - Amharic
+an (Aragonés) - Aragonese
+ar (العَرَبِيَّة) - Arabic
+as (অসমীয়া) - Assamese
+av (Авар) - Avaric
 ...
 [List of all supported locales goes here]
 ...
@@ -34,13 +37,10 @@ an (an) - Aragonese
 
 ## List a list of locales matching a specific pattern
 ```
-$ mdlm ls zh-Hans
-zh-Hans (简体中文) simplified Chinese
-zh-Hans-CN (zh-Hans-CN) PRC Mainland Chinese in simplified script
-zh-Hans-HK (zh-Hans-HK) Hong Kong Chinese in simplified script
-zh-Hans-MO (zh-Hans-MO) Macao Chinese in simplified script
-zh-Hans-SG (zh-Hans-SG) Singapore Chinese in simplified script
-zh-Hans-TW (繁體中文) Taiwan Chinese in simplified script
+$ mdlm ls uz
+uz (Ўзбек) Uzbek
+uz-Cyrl (Ўзбек) Uzbek in Cyrillic script
+uz-Latn (O‘zbekcha) Uzbek in Latin script
 ```
 
 ## Add a new locale

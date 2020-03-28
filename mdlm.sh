@@ -1,247 +1,234 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.2"
+MDLM_VERSION="0.0.3"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
-IANA_TAGS_LIST="aa|aa|Afar
-ab|ab|Abkhazian
-ae|ae|Avestan
-af|af|Afrikaans
-ak|ak|Akan
-am|am|Amharic
-an|an|Aragonese
+IANA_TAGS_LIST="aa|Afaraf|Afar
+ab|Аҧсуа|Abkhazian
+ae|Avesta|Avestan
+af|Afrikaans|Afrikaans
+ak|Akan|Akan
+am|አማርኛ|Amharic
+an|Aragonés|Aragonese
 ar|العَرَبِيَّة|Arabic
-as|as|Assamese
-av|av|Avaric
-ay|ay|Aymara
-az|az|Azerbaijani
-ba|ba|Bashkir
-be|be|Belarusian
-bg|bg|Bulgarian
-bh|bh|Bihari languages
-bi|bi|Bislama
-bm|bm|Bambara
+as|অসমীয়া|Assamese
+av|Авар|Avaric
+ay|Aymar|Aymara
+az|Azərbaycanca|Azerbaijani
+ba|Башҡорт|Bashkir
+be|Беларуская|Belarusian
+bg|Български|Bulgarian
+bh|भोजपुरी|Bihari languages
+bi|Bislama|Bislama
+bm|Bamanankan|Bambara
 bn|বাংলা|Bengali
-bo|bo|Tibetan
-br|br|Breton
-bs|bs|Bosnian
-ca|ca|Catalan
-ce|ce|Chechen
-ch|ch|Chamorro
-co|co|Corsican
-cr|cr|Cree
-cs|cs|Czech
-cu|cu|Church Slavic
-cv|cv|Chuvash
-cy|cy|Welsh
-da|da|Danish
+bo|བོད་ཡིག|Tibetan
+br|Brezhoneg|Breton
+bs|Bosanski|Bosnian
+ca|Català|Catalan
+ce|Нохчийн|Chechen
+ch|Chamoru|Chamorro
+co|Corsu|Corsican
+cr|Nehiyaw|Cree
+cs|Česky|Czech
+cu|Church Slavic|Church Slavic
+cv|Чăваш|Chuvash
+cy|Cymraeg|Welsh
+da|Dansk|Danish
 de|Deutsch|German
-dv|dv|Dhivehi
-dz|dz|Dzongkha
-ee|ee|Ewe
-el|el|Modern Greek (1453-)
+dv|ދިވެހި|Dhivehi
+dz|རྫོང་ཁ|Dzongkha
+ee|Eʋegbe|Ewe
+el|Ελληνικά|Modern Greek (1453-)
 en|English|English
-eo|eo|Esperanto
-es|es|Spanish
-et|et|Estonian
-eu|eu|Basque
-fa|fa|Persian
-ff|ff|Fulah
-fi|fi|Finnish
-fj|fj|Fijian
-fo|fo|Faroese
-fr|fr|French
-fy|fy|Western Frisian
-ga|ga|Irish
-gd|gd|Scottish Gaelic
-gl|gl|Galician
-gn|gn|Guarani
-gu|gu|Gujarati
-gv|gv|Manx
-ha|ha|Hausa
-he|he|Hebrew
-hi|hi|Hindi
-ho|ho|Hiri Motu
-hr|hr|Croatian
-ht|ht|Haitian
-hu|hu|Hungarian
-hy|hy|Armenian
-hz|hz|Herero
-ia|ia|Interlingua (International Auxiliary Language Association)
-id|id|Indonesian
-ie|ie|Interlingue
-ig|ig|Igbo
-ii|ii|Sichuan Yi
-ik|ik|Inupiaq
-in|in|Indonesian
-io|io|Ido
-is|is|Icelandic
-it|it|Italian
-iu|iu|Inuktitut
-iw|iw|Hebrew
+eo|Esperanto|Esperanto
+es|Español|Spanish
+et|Eesti|Estonian
+eu|Euskara|Basque
+fa|فارسی|Persian
+ff|Fulfulde|Fulah
+fi|Suomi|Finnish
+fj|Na Vosa Vakaviti|Fijian
+fo|Føroyskt|Faroese
+fr|Français|French
+fy|Frysk|Western Frisian
+ga|Gaeilge|Irish
+gd|Gàidhlig|Scottish Gaelic
+gl|Galego|Galician
+gn|Avañe'ẽ|Guarani
+gu|ગુજરાતી|Gujarati
+gv|Gaelg|Manx
+ha|هَوُسَ|Hausa
+he|עברית|Hebrew
+hi|हिन्दी|Hindi
+ho|Hiri Motu|Hiri Motu
+hr|Hrvatski|Croatian
+ht|Kreyòl ayisyen|Haitian
+hu|Magyar|Hungarian
+hy|Հայերեն|Armenian
+hz|Otjiherero|Herero
+ia|Interlingua|Interlingua (International Auxiliary Language Association)
+id|Bahasa Indonesia|Indonesian
+ie|Interlingue|Interlingue
+ig|Igbo|Igbo
+ii|四川彝语|Sichuan Yi
+ik|Iñupiak|Inupiaq
+in|bahasa Indonesia|Indonesian
+io|Ido|Ido
+is|Íslenska|Icelandic
+it|Italiano|Italian
+iu|ᐃᓄᒃᑎᑐᑦ|Inuktitut
 ja|日本語|Japanese
-ji|ji|Yiddish
-jv|jv|Javanese
-jw|jw|Javanese
-ka|ka|Georgian
-kg|kg|Kongo
-ki|ki|Kikuyu
-kj|kj|Kuanyama
-kk|kk|Kazakh
-kl|kl|Kalaallisut
-km|km|Khmer
-kn|kn|Kannada
-ko|ko|Korean
-kr|kr|Kanuri
-ks|ks|Kashmiri
-ku|ku|Kurdish
-kv|kv|Komi
-kw|kw|Cornish
-ky|ky|Kirghiz
-la|la|Latin
-lb|lb|Luxembourgish
-lg|lg|Ganda
-li|li|Limburgan
-ln|ln|Lingala
-lo|lo|Lao
-lt|lt|Lithuanian
-lu|lu|Luba-Katanga
-lv|lv|Latvian
-mg|mg|Malagasy
-mh|mh|Marshallese
-mi|mi|Maori
-mk|mk|Macedonian
-ml|ml|Malayalam
-mn|mn|Mongolian
-mo|mo|Moldavian
-mr|mr|Marathi
-ms|ms|Malay (macrolanguage)
-mt|mt|Maltese
-my|my|Burmese
-na|na|Nauru
-nb|nb|Norwegian Bokmål
-nd|nd|North Ndebele
-ne|ne|Nepali (macrolanguage)
-ng|ng|Ndonga
-nl|nl|Dutch
-nn|nn|Norwegian Nynorsk
-no|no|Norwegian
-nr|nr|South Ndebele
-nv|nv|Navajo
-ny|ny|Nyanja
-oc|oc|Occitan (post 1500)
-oj|oj|Ojibwa
-om|om|Oromo
-or|or|Oriya (macrolanguage)
-os|os|Ossetian
-pa|pa|Panjabi
-pi|pi|Pali
-pl|pl|Polish
-ps|ps|Pushto
-pt|pt|Portuguese
-qu|qu|Quechua
-rm|rm|Romansh
-rn|rn|Rundi
-ro|ro|Romanian
+ji|Yiddish|Yiddish
+jv|Basa Jawa|Javanese
+ka|ქართული|Georgian
+kg|KiKongo|Kongo
+ki|Gĩkũyũ|Kikuyu
+kj|Kuanyama|Kuanyama
+kk|Қазақша|Kazakh
+kl|Kalaallisut|Kalaallisut
+km|ភាសាខ្មែរ|Khmer
+kn|ಕನ್ನಡ|Kannada
+ko|한국어|Korean
+kr|Kanuri|Kanuri
+ks|कश्मीरी|Kashmiri
+ku|كوردی|Kurdish
+kv|Коми|Komi
+kw|Kernewek|Cornish
+ky|Кыргызча|Kirghiz
+la|Latina|Latin
+lb|Lëtzebuergesch|Luxembourgish
+lg|Luganda|Ganda
+li|Limburgs|Limburgan
+ln|Lingála|Lingala
+lo|ລາວ|Lao
+lt|Lietuvių|Lithuanian
+lu|Luba-Katanga|Luba-Katanga
+lv|Latviešu|Latvian
+mg|Malagasy|Malagasy
+mh|Kajin Majel|Marshallese
+mi|Māori|Maori
+mk|Македонски|Macedonian
+ml|മലയാളം|Malayalam
+mn|Монгол|Mongolian
+mo|Moldovenească|Moldavian
+mr|मराठी|Marathi
+ms|Bahasa Melayu|Malay (macrolanguage)
+mt|bil-Malti|Maltese
+my|Myanmasa|Burmese
+na|Dorerin Naoero|Nauru
+nb|Norwegian Bokmål|Norwegian Bokmål
+nd|Sindebele|North Ndebele
+ne|नेपाली|Nepali (macrolanguage)
+ng|Oshiwambo|Ndonga
+nl|Nederlands|Dutch
+nn|Norsk (nynorsk)|Norwegian Nynorsk
+no|Norsk (bokmål / riksmål)|Norwegian
+nr|isiNdebele|South Ndebele
+nv|Diné bizaad|Navajo
+ny|Chi-Chewa|Nyanja
+oc|Occitan|Occitan (post 1500)
+oj|ᐊᓂᔑᓈᐯᒧᐎᓐ|Ojibwa
+om|Oromoo|Oromo
+or|ଓଡ଼ିଆ|Oriya (macrolanguage)
+os|Иронау|Ossetian
+pa|ਪੰਜਾਬੀ|Panjabi
+pi|Pāli|Pali
+pl|Polski|Polish
+ps|پښتو|Pushto
+pt|Português|Portuguese
+qu|Runa Simi|Quechua
+rm|Rumantsch|Romansh
+rn|Kirundi|Rundi
+ro|Română|Romanian
 ru|Русский|Russian
-rw|rw|Kinyarwanda
-sa|sa|Sanskrit
-sc|sc|Sardinian
-sd|sd|Sindhi
-se|se|Northern Sami
-sg|sg|Sango
-sh|sh|Serbo-Croatian
-si|si|Sinhala
-sk|sk|Slovak
-sl|sl|Slovenian
-sm|sm|Samoan
-sn|sn|Shona
-so|so|Somali
-sq|sq|Albanian
-sr|sr|Serbian
-ss|ss|Swati
-st|st|Southern Sotho
-su|su|Sundanese
-sv|sv|Swedish
-sw|sw|Swahili (macrolanguage)
-ta|ta|Tamil
-te|te|Telugu
-tg|tg|Tajik
-th|th|Thai
-ti|ti|Tigrinya
-tk|tk|Turkmen
-tl|tl|Tagalog
-tn|tn|Tswana
-to|to|Tonga (Tonga Islands)
-tr|tr|Turkish
-ts|ts|Tsonga
-tt|tt|Tatar
-tw|tw|Twi
-ty|ty|Tahitian
-ug|ug|Uighur
-uk|uk|Ukrainian
-ur|ur|Urdu
-uz|uz|Uzbek
-ve|ve|Venda
-vi|vi|Vietnamese
-vo|vo|Volapük
-wa|wa|Walloon
-wo|wo|Wolof
-xh|xh|Xhosa
-yi|yi|Yiddish
-yo|yo|Yoruba
-za|za|Zhuang
-zh|zh|Chinese
-zu|zu|Zulu
-az-Arab|az-Arab|Azerbaijani in Arabic script
-az-Cyrl|az-Cyrl|Azerbaijani in Cyrillic script
-az-Latn|az-Latn|Azerbaijani in Latin script
-be-Latn|be-Latn|Belarusian in Latin script
-bs-Cyrl|bs-Cyrl|Bosnian in Cyrillic script
-bs-Latn|bs-Latn|Bosnian in Latin script
-de-1901|de-1901|German, traditional orthography
-de-1996|de-1996|German, orthography of 1996
-de-AT-1901|de-AT-1901|German, Austrian variant, traditional orthography
-de-AT-1996|de-AT-1996|German, Austrian variant, orthography of 1996
-de-CH-1901|de-CH-1901|German, Swiss variant, traditional orthography
-de-CH-1996|de-CH-1996|German, Swiss variant, orthography of 1996
-de-DE-1901|de-DE-1901|German, German variant, traditional orthography
-de-DE-1996|de-DE-1996|German, German variant, orthography of 1996
-en-boont|en-boont|Boontling
-en-scouse|en-scouse|Scouse
-es-419|es-419|Latin American Spanish
-iu-Cans|iu-Cans|Inuktitut in Canadian Aboriginal Syllabic script
-iu-Latn|iu-Latn|Inuktitut in Latin script
-mn-Cyrl|mn-Cyrl|Mongolian in Cyrillic script
-mn-Mong|mn-Mong|Mongolian in Mongolian script
-sl-nedis|sl-nedis|Natisone dialect, Nadiza dialect
-sl-rozaj|sl-rozaj|Resian, Resianic, Rezijan
-sr-Cyrl|sr-Cyrl|Serbian in Cyrillic script
-sr-Latn|sr-Latn|Serbian in Latin script
-tg-Arab|tg-Arab|Tajik in Arabic script
-tg-Cyrl|tg-Cyrl|Tajik in Cyrillic script
-uz-Cyrl|uz-Cyrl|Uzbek in Cyrillic script
-uz-Latn|uz-Latn|Uzbek in Latin script
-yi-Latn|yi-Latn|Yiddish, in Latin script
-zh-cmn|zh-cmn|Mandarin Chinese
-zh-cmn-Hans|zh-cmn-Hans|Mandarin Chinese (Simplified)
-zh-cmn-Hant|zh-cmn-Hant|Mandarin Chinese (Traditional)
-zh-gan|zh-gan|Kan or Gan
+rw|Kinyarwandi|Kinyarwanda
+sa|संस्कृतम्|Sanskrit
+sc|Sardu|Sardinian
+sd|सिनधि|Sindhi
+se|Davvisámegiella|Northern Sami
+sg|Sängö|Sango
+sh|Srpskohrvatski|Serbo-Croatian
+si|සිංහල|Sinhala
+sk|Slovenčina|Slovak
+sl|Slovenščina|Slovenian
+sm|Gagana Samoa|Samoan
+sn|chiShona|Shona
+so|Soomaaliga|Somali
+sq|Shqip|Albanian
+sr|Српски|Serbian
+ss|SiSwati|Swati
+st|Sesotho|Southern Sotho
+su|Basa Sunda|Sundanese
+sv|Svenska|Swedish
+sw|Kiswahili|Swahili (macrolanguage)
+ta|தமிழ்|Tamil
+te|తెలుగు|Telugu
+tg|Тоҷикӣ|Tajik
+th|ไทย|Thai
+ti|ትግርኛ|Tigrinya
+tk|Туркмен|Turkmen
+tl|Tagalog|Tagalog
+tn|Setswana|Tswana
+to|Lea Faka-Tonga|Tonga (Tonga Islands)
+tr|Türkçe|Turkish
+ts|Xitsonga|Tsonga
+tt|Tatarça|Tatar
+tw|Twi|Twi
+ty|Reo Mā\`ohi|Tahitian
+ug|Uyƣurqə|Uighur
+uk|Українська|Ukrainian
+ur|اردو|Urdu
+uz|Ўзбек|Uzbek
+ve|Tshivenḓa|Venda
+vi|Việtnam|Vietnamese
+vo|Volapük|Volapük
+wa|Walon|Walloon
+wo|Wollof|Wolof
+xh|isiXhosa|Xhosa
+yi|ייִדיש|Yiddish
+yo|Yorùbá|Yoruba
+za|Cuengh|Zhuang
+zh|简体中文|Chinese
+zu|isiZulu|Zulu
+az-Arab|آذربايجان|Azerbaijani in Arabic script
+az-Cyrl|Aзәрбајҹан дили|Azerbaijani in Cyrillic script
+az-Latn|Azərbaycanca|Azerbaijani in Latin script
+be-Latn|Biełaruskaja|Belarusian in Latin script
+bs-Cyrl|Босански|Bosnian in Cyrillic script
+bs-Latn|Иosanski|Bosnian in Latin script
+iu-Cans|ᐃᓄᒃᑎᑐᑦ|Inuktitut in Canadian Aboriginal Syllabic script
+iu-Latn|Inuktitut|Inuktitut in Latin script
+mn-Cyrl|Монгол|Mongolian in Cyrillic script
+mn-Mong|Mongɣol|Mongolian in Mongolian script
+sl-nedis|Nadiza dialect of Slovenian|Natisone dialect, Nadiza dialect
+sl-rozaj|Rezijan dialect of Slovenian|Resian, Resianic, Rezijan
+sr-Cyrl|Српски|Serbian in Cyrillic script
+sr-Latn|Srpski|Serbian in Latin script
+tg-Arab|تاجیکی|Tajik in Arabic script
+tg-Cyrl|Тоҷикӣ|Tajik in Cyrillic script
+uz-Cyrl|Ўзбек|Uzbek in Cyrillic script
+uz-Latn|O‘zbekcha|Uzbek in Latin script
+yi-Latn|Yidish|Yiddish, in Latin script
+zh-cmn|官话|Mandarin Chinese
+zh-cmn-Hans|官话|Mandarin Chinese (Simplified)
+zh-cmn-Hant|官話|Mandarin Chinese (Traditional)
+zh-gan|贛語|Kan or Gan
 zh-Hans|简体中文|simplified Chinese
 zh-Hans-CN|zh-Hans-CN|PRC Mainland Chinese in simplified script
 zh-Hans-HK|zh-Hans-HK|Hong Kong Chinese in simplified script
 zh-Hans-MO|zh-Hans-MO|Macao Chinese in simplified script
 zh-Hans-SG|zh-Hans-SG|Singapore Chinese in simplified script
 zh-Hans-TW|繁體中文|Taiwan Chinese in simplified script
-zh-Hant|zh-Hant|traditional Chinese
+zh-Hant|漢語|traditional Chinese
 zh-Hant-CN|zh-Hant-CN|PRC Mainland Chinese in traditional script
 zh-Hant-HK|zh-Hant-HK|Hong Kong Chinese in traditional script
 zh-Hant-MO|zh-Hant-MO|Macao Chinese in traditional script
 zh-Hant-SG|zh-Hant-SG|Singapore Chinese in traditional script
 zh-Hant-TW|zh-Hant-TW|Taiwan Chinese in traditional script
 zh-wuu|zh-wuu|Shanghaiese or Wu
-zh-yue|zh-yue|Cantonese"
+zh-yue|粵語|Cantonese"
 
 MDLM_HEADER="<!-- @l10n:h -->"
 MDLM_P_OPEN="<!-- @l10n:p"
