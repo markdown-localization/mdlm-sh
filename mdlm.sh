@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.3"
+MDLM_VERSION="0.0.4"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
@@ -499,7 +499,6 @@ mdlm_status() {
         then
         # TODO: replace l10n hardcode with variable.
           command diff --color -B <(grep -v "<!--[\ ]*@l10n:h[\ ]*-->" "${MD_FILE_LOCALE}" | sed -e '/@l10n:p -->/,/<!-- @l10n:p/d' -e '/<!-- @l10n:p/d') <(grep -v "${MDLM_HEADER}" "${MD_FILE}")
-          mdlm_echo
         fi
       done
     else
