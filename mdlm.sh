@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.4"
+MDLM_VERSION="0.0.5"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
@@ -363,7 +363,7 @@ mdlm_update_all_headers() {
         NEW_HEADER="${NEW_HEADER} | ${NEXT_LOCALE_ENTRY}"
       done
 
-      NEW_HEADER="${NEW_HEADER} | *[Add](\/CONTRIBUTING.md#localization)* ${MDLM_HEADER}"
+      NEW_HEADER="${NEW_HEADER} | *[Add](https://github.com/markdown-l10n/markdown-l10n-spec#workflow)* ${MDLM_HEADER}"
 
       # Apply header to all files.
       HEADER_EXISTS="$(grep -c "${MDLM_HEADER}" ${MD_FILE})"
