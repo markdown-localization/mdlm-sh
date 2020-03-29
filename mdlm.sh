@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.6"
+MDLM_VERSION="0.0.7"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
