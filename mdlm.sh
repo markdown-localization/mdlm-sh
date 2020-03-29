@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MDLM_VERSION="0.0.6"
+MDLM_VERSION="0.0.7"
 
 IANA_TAG_DEFAULT="en|English|English"
 # http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
@@ -469,6 +469,8 @@ mdlm_status() {
     mdlm_echo "Localization status for all locales."
   fi
 
+  local DIFF_COUNT=0
+
   local MD_FILES="$(command find * -name "*.md" ! -name "*-[[:alnum:]]*.md" -print | sort)"
   for MD_FILE in ${MD_FILES}
   do
@@ -490,6 +492,7 @@ mdlm_status() {
         if [ $OUTDATED_SECTIONS -gt 0 ]
         then
           STATUS="${red}outdated.${normal}"
+          DIFF_COUNT=$((DIFF_COUNT+1))
         else
           STATUS="${green}synced.${normal}"
         fi
@@ -505,6 +508,13 @@ mdlm_status() {
       mdlm_echo "- No localization"
     fi
   done
+
+  if [ $DIFF_COUNT -eq 0 ]
+  then
+    return 0
+  else
+    return 2
+  fi
 }
 
 mdlm_help() {
