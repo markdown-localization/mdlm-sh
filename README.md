@@ -22,31 +22,104 @@ alias mdlm='$MDLM_DIR/mdlm.sh'
 
 ## List all supported locales
 
-![List locales](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-ls.png)
+```
+$ mdlm ls
+aa (Afaraf) - Afar
+ab (Аҧсуа) - Abkhazian
+ae (Avesta) - Avestan
+af (Afrikaans) - Afrikaans
+ak (Akan) - Akan
+am (አማርኛ) - Amharic
+an (Aragonés) - Aragonese
+ar (العَرَبِيَّة) - Arabic
+as (অসমীয়া) - Assamese
+av (Авар) - Avaric
+```
 
 ## List supported locales matching a specific pattern
 
-![List locales matching pattern](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-ls-locale.png)
+```
+$ mdlm ls uz
+uz (Ўзбек) Uzbek
+uz-Cyrl (Ўзбек) Uzbek in Cyrillic script
+uz-Latn (O‘zbekcha) Uzbek in Latin script
+```
 
 ## Add a new locale
 
-![Add a new locale](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-add.png)
+```
+$ mdlm add eo
+Creating new localization files.
+
+Please confirm locale - "eo (Esperanto) Esperanto" (yes): 
+
+Localize example/README.md (example/README-eo.md)? (yes): 
+Created.
+
+Localize README.md (README-eo.md)? (yes): n
+Skipped.
+
+Finished
+Total files created: 1
+```
 
 As a result, new README-eo.md file will be created. Localization switcher header will be added to original and localized files.
 
 ## Remove a locale
 
-![Remove a locale](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-rm.png)
+```
+$ mdlm rm eo
+WARNING: Deleting localization files.
+
+Please confirm locale - "eo (Esperanto) Esperanto" (yes): 
+
+List of files to delete:
+example/README-eo.md
+
+Are you sure want to delete all files? (yes): 
+Localization files deleted.
+```
 
 As a result, README-eo.md will be removed. Localization switcher header will be updated, or removed, if no other localizations available.
 
 ## Check synchronization status
 
-![Check sync status](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-status.png)
+```
+$ mdlm status
+Localization status for all locales.
+
+example/README.md (English):
+* example/README-ru.md (Русский) - synced.
+* example/README-ar.md (العَرَبِيَّة) - synced.
+* example/README-zh-Hans.md (简体中文) - synced.
+* example/README-es.md (Español) - outdated.
+* example/README-fr.md (Français) - synced.
+
+README.md (English):
+* README-ru.md (Русский) - synced.
+```
 
 ### Check synchronization status with a diff
 
-![Check sync status with diff](https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/assets/mdlm-sh-status-diff.png)
+```
+$ mdlm status --diff
+Localization status for all locales.
+
+example/README.md (English):
+* example/README-ru.md (Русский) - synced.
+* example/README-ar.md (العَرَبِيَّة) - synced.
+* example/README-zh-Hans.md (简体中文) - synced.
+* example/README-es.md (Español) - outdated.
+5c4,5
+< Here is an outdated text of example.
+---
+> Here is a text of example.
+> 
+* example/README-fr.md (Français) - synced.
+
+README.md (English):
+* README-ru.md (Русский) - synced.
+```
 
 # Credits
 Special thanks to [nvm-sh/nvm](https://github.com/nvm-sh/nvm) for inpsiration and specifics.
