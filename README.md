@@ -1,3 +1,5 @@
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3814/badge)](https://bestpractices.coreinfrastructure.org/projects/3814)
+
 # Markdown Localization Manager
 
 Minimal reference implenentation of [Markdown Localization Specification](https://github.com/markdown-localization/markdown-localization-spec)
