@@ -2,8 +2,8 @@
 
 { # this ensures the entire script is downloaded #
 
-MDLM_VERSION="0.0.8"
-MDLM_REMOTE_FILE="https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v${MDLM_VERSION}/mdlm.sh"
+MDLM_VERSION="0.0.9"
+MDLM_REMOTE_FILE="https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v${MDLM_VERSION}/mdlm.sh"
 
 mdlm_echo() {
   command printf %s\\n "$*" 2>/dev/null

@@ -1,15 +1,15 @@
 # Markdown Localization Manager
 
-Minimal reference implenentation based on the [Markdown L10N Specification](https://github.com/markdown-l10n/markdown-l10n-spec)
+Minimal reference implenentation of [Markdown Localization Specification](https://github.com/markdown-localization/markdown-localization-spec)
 
 # Installing and Updating
 
 To install or update mdlm, you should run the install script. To do that, you may either download and run the script manually, or use the following cURL or Wget command:
 ```sh
-curl -o- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.8/install.sh | bash
+curl -o- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.9/install.sh | bash
 ```
 ```sh
-wget -qO- https://raw.githubusercontent.com/markdown-l10n/mdlm-sh/v0.0.8/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.8/install.sh | bash
 ```
 Running either of the above commands downloads a script and runs it. The script copies mdlm script to `~/.mdlm`, and attempts to add the source lines from the snippet below to the correct profile file (`~/.bash_profile`, or `~/.bashrc`).
 
@@ -99,26 +99,18 @@ README.md (English):
 * README-ru.md (Русский) - synced.
 ```
 
-### Check synchronization status with a diff
+### Get synchronization diff
 
+Locale argument is optional.
 ```
-$ mdlm status --diff
-Localization status for all locales.
-
-example/README.md (English):
-* example/README-ru.md (Русский) - synced.
-* example/README-ar.md (العَرَبِيَّة) - synced.
-* example/README-zh-Hans.md (简体中文) - synced.
-* example/README-es.md (Español) - outdated.
+$ ../mdlm-sh/mdlm.sh diff es
+Localization status for: es (Español) - Spanish.
+- example/README-es.md (Español) - outdated.
 5c4,5
 < Here is an outdated text of example.
 ---
 > Here is a text of example.
 > 
-* example/README-fr.md (Français) - synced.
-
-README.md (English):
-* README-ru.md (Русский) - synced.
 ```
 
 # Contributing

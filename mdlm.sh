@@ -9,7 +9,7 @@
 # Functions:
 # - mdlm_* - custom functions.
 
-MDLM_VERSION="0.0.8"
+MDLM_VERSION="0.0.9"
 
 DEFAULT_LCM_TAG="en"
 DEFAULT_LCM_LOCAL="English"
@@ -21,7 +21,7 @@ MDLM_P_TBD="TBD"
 MDLM_IGNORE_START="<!-- @l10n:ignore start -->"
 MDLM_IGNORE_END="<!-- @l10n:ignore end -->"
 
-MDLM_ADD_LINK="https://github.com/markdown-l10n/markdown-l10n-spec#workflow"
+MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
 
 normal=$'\e[0m'
 bold=$(tput bold)
