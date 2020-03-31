@@ -34,6 +34,14 @@ mdlm_echo() {
   command printf %s\\n "$*" 2>/dev/null
 }
 
+mdlm_echo_conditional() {
+  local CONDITION="${1}"
+  shift
+  if [ "${CONDITION}" -eq "0" ]; then
+    mdlm_echo $*
+  fi
+}
+
 mdlm_validate_args_count() {
   local MIN_COUNT="${1}"
   local MAX_COUNT="${2}"
@@ -157,7 +165,6 @@ mdlm_rm_locale() {
   mdlm_validate_locale "${LCM}"
 
   local LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
-
   local RM_ALL_FILES="$(find * -name "*-${LCM_SUFFIX}.md")"
   local RM_FILE
 
@@ -268,8 +275,9 @@ mdlm_status() {
   local STATUS
 
   for ORIG_FILE in $(mdlm_find_original_files); do
-    mdlm_echo "${yellow}${ORIG_FILE}${normal} (${DEFAULT_LCM_LOCAL}):"
-    local LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}" "${LCM}")"
+    mdlm_echo_conditional "${SHOW_DIFF}" "${yellow}${ORIG_FILE}${normal} (${DEFAULT_LCM_LOCAL}):"
+    local LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
+    local LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}" "${LCM_SUFFIX}")"
 
     if [ -n "${LCM_LIST}" ]; then
       for NEXT_LCM_SUFFIX in ${LCM_LIST}; do
@@ -285,18 +293,21 @@ mdlm_status() {
           STATUS="${green}synced.${normal}"
         fi
 
-        mdlm_echo "- ${yellow}${LCM_FILE}${normal} (${LCM_LOCAL_NAME}) - ${STATUS}"
+        if [ ${SHOW_DIFF} -eq 0 ] || [ $OUTDATED_SECTIONS -gt 0 ]; then
+          mdlm_echo "- ${yellow}${LCM_FILE}${normal} (${LCM_LOCAL_NAME}) - ${STATUS}"
+        fi
 
         if [ ${SHOW_DIFF} -eq 1 ]; then
           mdlm_original_diff ${ORIG_FILE} ${LCM_FILE}
         fi
       done
     else
-      mdlm_echo "- No localization."
+      mdlm_echo_conditional "$SHOW_DIFF" "- No localization."
     fi
   done
 
   if [ $DIFF_COUNT -eq 0 ]; then
+    mdlm_echo "No differences."
     return 0
   else
     return 2
@@ -311,7 +322,7 @@ mdlm_help() {
   mdlm_echo "  mdlm add <locale>         Create localization files for given <locale>"
   mdlm_echo "  mdlm rm <locale>          Remove all localization files for given <locale>"
   mdlm_echo "  mdlm status [<locale>]    Check synchronization status between original and localized versions, for a given <locale> if provided"
-  mdlm_echo "    --diff                  Shows diff, if available."
+  mdlm_echo "  mdlm diff [<locale>]     Show synchronization diff between original and localized versions, for a given <locale> if provided"
 }
 
 mdlm() {
@@ -333,42 +344,23 @@ mdlm() {
     ;;
     "ls" | "list")
       mdlm_validate_args_count 0 1 $#
-
-      local LOCALE_SEARCH="${1}"
-      mdlm_list_available_locales ${LOCALE_SEARCH}
+      mdlm_list_available_locales "${1}"
     ;;
     "add")
       mdlm_validate_args_count 1 1 $#
-
-      local NEW_LOCALE="${1}"
-      mdlm_add_locale ${NEW_LOCALE}
+      mdlm_add_locale "${1}"
     ;;
     "rm")
       mdlm_validate_args_count 1 1 $#
-
-      local RM_LOCALE="${1}"
-      mdlm_rm_locale ${RM_LOCALE}
+      mdlm_rm_locale "${1}"
     ;;
     "status")
-      mdlm_validate_args_count 0 2 $#
-
-      local SHOW_DIFF=0
-      local ST_LOCALE=""
-      while [ $# -ne 0 ]
-      do
-        case "$1" in
-          --diff)
-            SHOW_DIFF=1
-            shift
-          ;;
-          *)
-            ST_LOCALE="$1"
-            shift
-          ;;
-        esac
-      done
-
-      mdlm_status ${SHOW_DIFF} ${ST_LOCALE}
+      mdlm_validate_args_count 0 1 $#
+      mdlm_status 0 "${1}"
+    ;;
+    "diff")
+      mdlm_validate_args_count 0 1 $#
+      mdlm_status 1 "${1}"
     ;;
     *)
       mdlm_echo "Unkown command: '${COMMAND}'"
