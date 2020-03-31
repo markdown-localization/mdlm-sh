@@ -121,5 +121,10 @@ README.md (English):
 * README-ru.md (Русский) - synced.
 ```
 
+# Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
 # Credits
+
 Special thanks to [nvm-sh/nvm](https://github.com/nvm-sh/nvm) for inpsiration and specifics.
