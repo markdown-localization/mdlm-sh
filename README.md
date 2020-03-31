@@ -103,7 +103,7 @@ README.md (English):
 
 Locale argument is optional.
 ```
-$ ../mdlm-sh/mdlm.sh diff es
+$ mdlm diff es
 Localization status for: es (Español) - Spanish.
 - example/README-es.md (Español) - outdated.
 5c4,5
