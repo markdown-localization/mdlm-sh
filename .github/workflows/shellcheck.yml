@@ -1,0 +1,21 @@
+name: shellcheck
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install ShellCheck
+      run: echo Hello, world!
+
+    - name: Run Static analysis
+      run: |
+        shellcheck install.sh mdlm.sh

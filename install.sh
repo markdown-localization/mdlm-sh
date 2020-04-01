@@ -35,12 +35,13 @@ mdlm_detect_profile() {
 }
 
 mdlm_update_profile() {
-  local MDLM_PROFILE="$(mdlm_detect_profile)"
-  local PROFILE_INSTALL_DIR="$(mdlm_install_dir | command sed "s:^$HOME:\$HOME:")"
+  local MDLM_PROFILE
+  local PROFILE_INSTALL_DIR
+
+  MDLM_PROFILE="$(mdlm_detect_profile)"
+  PROFILE_INSTALL_DIR="$(mdlm_install_dir | command sed "s:^$HOME:\$HOME:")"
 
   SOURCE_STR="\\nexport MDLM_DIR=\"${PROFILE_INSTALL_DIR}\"\\nalias mdlm='\$MDLM_DIR/mdlm.sh'\\n"
-
-  BASH_OR_ZSH=false
 
   if [ -z "${MDLM_PROFILE-}" ] ; then
     echo "=> Profile not found. Tried ~/.bashrc and ~/.bash_profile."
@@ -61,13 +62,14 @@ mdlm_update_profile() {
 
 mdlm_install() {
   mdlm_echo "Installing Markdown localization manager."
-
-  local INSTALL_DIR="$(mdlm_install_dir)"
+  local INSTALL_DIR
+  
+  INSTALL_DIR="$(mdlm_install_dir)"
 
   mdlm_echo
   command echo -n "Install ${INSTALL_DIR}? (yes): "
-  read install_confirmation
-  if [ ! -z "$install_confirmation" ] && [ ! "$install_confirmation" = "yes" ] && [ ! "$install_confirmation" = "y" ]
+  read -r install_confirmation
+  if [ -n "$install_confirmation" ] && [ ! "$install_confirmation" = "yes" ] && [ ! "$install_confirmation" = "y" ]
   then
     mdlm_echo "Cancelled."
   fi
@@ -80,7 +82,7 @@ mdlm_install() {
   fi
 
   MDLM_LOCAL_FILE="$INSTALL_DIR/mdlm.sh"
-  mdlm_download $MDLM_REMOTE_FILE $MDLM_LOCAL_FILE || {
+  mdlm_download "$MDLM_REMOTE_FILE" "$MDLM_LOCAL_FILE" || {
     mdlm_echo
     mdlm_echo "Failed to download '$MDLM_LOCAL_FILE'"
     mdlm_echo "Exiting."

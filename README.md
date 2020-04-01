@@ -1,3 +1,4 @@
+[![shellcheck](https://github.com/markdown-localization/mdlm-sh/workflows/shellcheck/badge.svg)](https://github.com/markdown-localization/mdlm-sh/actions?query=workflow:shellcheck)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3814/badge)](https://bestpractices.coreinfrastructure.org/projects/3814)
 
 # Markdown Localization Manager

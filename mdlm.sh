@@ -8,10 +8,8 @@
 #
 # Functions:
 # - mdlm_* - custom functions.
-
 MDLM_VERSION="0.0.9"
 
-DEFAULT_LCM_TAG="en"
 DEFAULT_LCM_LOCAL="English"
 
 MDLM_HEADER="<!-- @l10n:h -->"
@@ -24,7 +22,6 @@ MDLM_IGNORE_END="<!-- @l10n:ignore end -->"
 MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
 
 normal=$'\e[0m'
-bold=$(tput bold)
 green=$(tput setaf 2)
 red=$(tput setaf 1)
 yellow=$(tput setaf 3)
@@ -38,7 +35,7 @@ mdlm_echo_conditional() {
   local CONDITION="${1}"
   shift
   if [ "${CONDITION}" -eq "0" ]; then
-    mdlm_echo $*
+    mdlm_echo "$*"
   fi
 }
 
@@ -58,17 +55,14 @@ mdlm_validate_args_count() {
   fi
 }
 
-mdlm_escape_string() {
-  echo "${1}" | sed -e 's/\//\\\//g'
-}
-
 mdlm_version() {
   mdlm_echo "Markdown Localization Manager - Bash (v${MDLM_VERSION})"
 }
 
 mdlm_list_available_locales() {
   local PATTERN="${1}"
-  local LCM_LIST="$(list_locales)"
+  local LCM_LIST
+  LCM_LIST="$(list_locales)"
 
   if [ -n "${PATTERN}" ]; then
     LCM_LIST="$(mdlm_echo "${LCM_LIST}" | grep -i "${PATTERN}")"
@@ -84,71 +78,79 @@ mdlm_find_one_locale() {
 }
 
 mdlm_get_locale_suffix() {
-  echo ${1} | awk '{print $1}'
+  echo "${1}" | awk '{print $1}'
 }
 
 mdlm_get_locale_local_name() {
-  echo ${1} | awk '{print $2}' | sed -e 's/[()]//g'
+  echo "${1}" | awk '{print $2}' | sed -e 's/[()]//g'
 }
 
 mdlm_validate_locale() {
-  local LCM="${1}"
+  local LCM
+  LCM="${1}"
 
-  if [ ! -n "${1}" ]; then
+  if [ -z "${1}" ]; then
     mdlm_echo "No matching locales found."
     exit 1
   fi
 
   local LCM_CONFIRM
   command echo -n "Please confirm locale - \"${blue}${LCM}${normal}\" (yes): "
-  read LCM_CONFIRM
+  read -r LCM_CONFIRM
 
-  if [ ! -z "$LCM_CONFIRM" ] && [ ! "$LCM_CONFIRM" = "yes" ] && [ ! "$LCM_CONFIRM" = "y" ]; then
+  if [ -n "$LCM_CONFIRM" ] && [ ! "$LCM_CONFIRM" = "yes" ] && [ ! "$LCM_CONFIRM" = "y" ]; then
     mdlm_echo "Please choose another locale. Exiting."
     exit 1
   fi
 }
 
 mdlm_find_original_files() {
-  command find * -name "*.md" ! -name "*-[[:alnum:]]*.md" -print | sort
+  command find . -name "*.md" ! -name "*-[[:alnum:]]*.md" -printf '%P\n' | sort
 }
 
 mdlm_get_localized_file_name() {
   local ORIG_FILE=${1}
   local LCM_SUFFIX=${2}
-  echo ${ORIG_FILE} | sed -e "s/\./\-${LCM_SUFFIX}\./g"
+
+  echo "${ORIG_FILE//./-${LCM_SUFFIX}.}"
 }
 
 mdlm_copy_original_to_localized_file() {
   local ORIG_FILE=${1}
   local LCM_FILE=${2}
+  local HEADER
 
-  local HEADER="$(grep "${MDLM_HEADER}" "${ORIG_FILE}")"
-  command echo "${HEADER}" > ${LCM_FILE}
-  command grep -v "${MDLM_HEADER}" ${ORIG_FILE} \
+  HEADER="$(grep "${MDLM_HEADER}" "${ORIG_FILE}")"
+
+  command echo "${HEADER}" > "${LCM_FILE}"
+  command grep -v "${MDLM_HEADER}" "${ORIG_FILE}" \
     | sed -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d" \
     | awk -v RS="(^|\n)#" -v popen="${MDLM_P_OPEN}" -v pclose="${MDLM_P_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
-      '{ if ($0) print popen "\n#" $0 pclose "\n" ptbd "\n"}' >> ${LCM_FILE}
+      '{ if ($0) print popen "\n#" $0 pclose "\n" ptbd "\n"}' >> "${LCM_FILE}"
 }
 
 mdlm_add_locale() {
   mdlm_echo "Creating new localization files."
-  local LCM="$(mdlm_find_one_locale ${1})"
+  local LCM
+  local LCM_SUFFIX
+  local ORIG_FILE
+  local LCM_FILE
+  local COUNT=0
+
+  LCM="$(mdlm_find_one_locale "${1}")"
   mdlm_validate_locale "${LCM}"
   
-  local LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
-  local COUNT=0
-  local ORIG_FILE
+  LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
 
   for ORIG_FILE in $(mdlm_find_original_files); do
-    local LCM_FILE=$(mdlm_get_localized_file_name ${ORIG_FILE} ${LCM_SUFFIX})
+    LCM_FILE=$(mdlm_get_localized_file_name "${ORIG_FILE}" "${LCM_SUFFIX}")
 
     command echo -n "Localize ${yellow}${ORIG_FILE}${normal} (${yellow}${LCM_FILE}${normal})? (yes): "
-    read LCM_FILE_CONFIRM
-    if [ ! -z "${LCM_FILE_CONFIRM}" ] && [ ! "${LCM_FILE_CONFIRM}" = "yes" ] && [ ! "${LCM_FILE_CONFIRM}" = "y" ]; then
+    read -r LCM_FILE_CONFIRM
+    if [ -n "${LCM_FILE_CONFIRM}" ] && [ ! "${LCM_FILE_CONFIRM}" = "yes" ] && [ ! "${LCM_FILE_CONFIRM}" = "y" ]; then
       mdlm_echo "- Skipped."
     else
-      mdlm_copy_original_to_localized_file ${ORIG_FILE} ${LCM_FILE}
+      mdlm_copy_original_to_localized_file "${ORIG_FILE}" "${LCM_FILE}"
 
       COUNT=$((COUNT+1))
       mdlm_echo "- Created."
@@ -161,21 +163,25 @@ mdlm_add_locale() {
 
 mdlm_rm_locale() {
   mdlm_echo "Removing localization files."
-  local LCM="$(mdlm_find_one_locale ${1})"
+  local LCM
+  local LCM_SUFFIX
+  local RM_ALL_FILES
+  local RM_FILE
+  
+  LCM="$(mdlm_find_one_locale "${1}")"
   mdlm_validate_locale "${LCM}"
 
-  local LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
-  local RM_ALL_FILES="$(find * -name "*-${LCM_SUFFIX}.md")"
-  local RM_FILE
-
+  LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
+  RM_ALL_FILES="$(find . -name "*-${LCM_SUFFIX}.md" -printf '%P\n')"
+  
   for RM_FILE in $RM_ALL_FILES; do
-    command echo -n "Delete ${yellow}"${RM_FILE}"${normal} (yes): "
-    read RM_CONFIRM
-    if [ ! -z "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]
+    command echo -n "Delete ${yellow}${RM_FILE}${normal} (yes): "
+    read -r RM_CONFIRM
+    if [ -n "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]
     then
       mdlm_echo "- Skipped."
     else
-      command rm ${RM_FILE}
+      command rm "${RM_FILE}"
       mdlm_echo "- Removed."
     fi
   done
@@ -188,33 +194,46 @@ mdlm_create_header() {
   local LCM_LIST=${1}
   local ORIG_FILE=${2}
 
+  local ORIG_FILE_NAME
   local NEXT_LCM
   local LCM_LOCAL_NAME
   local LCM_FILE
+  local LCM_FILE_NAME
+  local HEADER
+  
+  ORIG_FILE_NAME=${ORIG_FILE//*\//}
 
-  local HEADER="[${DEFAULT_LCM_LOCAL}](${ORIG_FILE})"
+  HEADER="[${DEFAULT_LCM_LOCAL}](${ORIG_FILE_NAME})"
 
   for NEXT_LCM_SUFFIX in ${LCM_LIST}; do
     NEXT_LCM="$(mdlm_find_one_locale "${NEXT_LCM_SUFFIX}")"
     LCM_LOCAL_NAME="$(mdlm_get_locale_local_name "${NEXT_LCM}")"
     LCM_FILE="$(mdlm_get_localized_file_name "${ORIG_FILE}" "${NEXT_LCM_SUFFIX}")"
+    LCM_FILE_NAME=${LCM_FILE//*\//}
 
-    HEADER="${HEADER} | [${LCM_LOCAL_NAME}](${LCM_FILE})"
+    HEADER="${HEADER} | [${LCM_LOCAL_NAME}](${LCM_FILE_NAME})"
   done
 
-  echo "${HEADER} | *[Add]($(mdlm_escape_string "${MDLM_ADD_LINK}"))* ${MDLM_HEADER}"
+  echo "${HEADER} | *[Add](${MDLM_ADD_LINK//\//\\\/})* ${MDLM_HEADER}"
 }
 
 mdlm_set_selected_header_file() {
   local HEADER=${1}
   local SELECTED_FILE=${2}
 
-  local NEW_HEADER_DEFAULT="$(echo ${HEADER} | sed -e "s/\([^ ]*\)${SELECTED_FILE})/**\1${SELECTED_FILE})**/")"
-  local HEADER_EXISTS="$(grep -c "${MDLM_HEADER}" ${SELECTED_FILE})"
-  if [ ${HEADER_EXISTS} -eq 1 ]; then
-    command sed -i "s/.*${MDLM_HEADER}.*/${NEW_HEADER_DEFAULT}/" ${SELECTED_FILE}
+  local SELECTED_FILE_NAME
+  local NEW_HEADER_DEFAULT
+  local HEADER_EXISTS
+  
+  SELECTED_FILE_NAME=${SELECTED_FILE//*\//}
+
+  # shellcheck disable=SC2001
+  NEW_HEADER_DEFAULT="$(echo "${HEADER}" | sed -e "s|\([^ ]*\)${SELECTED_FILE_NAME})|**\1${SELECTED_FILE_NAME})**|g")"
+  HEADER_EXISTS="$(grep -c "${MDLM_HEADER}" "${SELECTED_FILE}")"
+  if [ "${HEADER_EXISTS}" -eq 1 ]; then
+    command sed -i "s/.*${MDLM_HEADER}.*/${NEW_HEADER_DEFAULT}/" "${SELECTED_FILE}"
   else
-    command sed -i "1 i\\${NEW_HEADER_DEFAULT}" ${SELECTED_FILE}
+    command sed -i "1 i\\${NEW_HEADER_DEFAULT}" "${SELECTED_FILE}"
   fi
 }
 
@@ -223,8 +242,9 @@ mdlm_update_all_headers() {
     local HEADER
     local NEXT_LCM_SUFFIX
     local LCM_FILE
-
-    local LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}")"
+    local LCM_LIST
+    
+    LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}")"
     if [ -n "${LCM_LIST}" ]; then
       HEADER="$(mdlm_create_header "${LCM_LIST}" "${ORIG_FILE}")"
 
@@ -234,7 +254,7 @@ mdlm_update_all_headers() {
         mdlm_set_selected_header_file "${HEADER}" "${LCM_FILE}"
       done
     else
-      command sed -i "/.*${MDLM_HEADER}.*/d" ${ORIG_FILE}
+      command sed -i "/.*${MDLM_HEADER}.*/d" "${ORIG_FILE}"
     fi
   done
 }
@@ -249,9 +269,8 @@ mdlm_original_diff() {
 mdlm_get_file_localizations() {
   local ORIG_FILE=${1}
   local LCM=${2}
-
-  local ORIG_FILE_MASK="$(echo ${ORIG_FILE} | sed -e 's/\.md/\-*\.md/')"
-  find * -wholename "${ORIG_FILE_MASK}" | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
+  
+  find . -path "./${ORIG_FILE//.md/-*.md}" -printf '%P\n' | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
 }
 
 mdlm_status() {
@@ -273,32 +292,40 @@ mdlm_status() {
   local DIFF_COUNT=0
   local ORIG_FILE
   local STATUS
+  local LCM_SUFFIX
+  local LCM_LIST
 
+  
   for ORIG_FILE in $(mdlm_find_original_files); do
     mdlm_echo_conditional "${SHOW_DIFF}" "${yellow}${ORIG_FILE}${normal} (${DEFAULT_LCM_LOCAL}):"
-    local LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
-    local LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}" "${LCM_SUFFIX}")"
+    LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
+    LCM_LIST="$(mdlm_get_file_localizations "${ORIG_FILE}" "${LCM_SUFFIX}")"
 
     if [ -n "${LCM_LIST}" ]; then
       for NEXT_LCM_SUFFIX in ${LCM_LIST}; do
-        local NEXT_LCM="$(mdlm_find_one_locale "${NEXT_LCM_SUFFIX}")"
-        local LCM_LOCAL_NAME="$(mdlm_get_locale_local_name "${NEXT_LCM}")"
-        local LCM_FILE="$(mdlm_get_localized_file_name "${ORIG_FILE}" "${NEXT_LCM_SUFFIX}")"
+        local NEXT_LCM
+        local LCM_LOCAL_NAME
+        local LCM_FILE
+        local OUTDATED_SECTIONS
+
+        NEXT_LCM="$(mdlm_find_one_locale "${NEXT_LCM_SUFFIX}")"
+        LCM_LOCAL_NAME="$(mdlm_get_locale_local_name "${NEXT_LCM}")"
+        LCM_FILE="$(mdlm_get_localized_file_name "${ORIG_FILE}" "${NEXT_LCM_SUFFIX}")"
         
-        local OUTDATED_SECTIONS="$(mdlm_original_diff "${ORIG_FILE}" "${LCM_FILE}" | grep -v -e "[-<>]" | wc -l)"
-        if [ $OUTDATED_SECTIONS -gt 0 ]; then
+        OUTDATED_SECTIONS="$(mdlm_original_diff "${ORIG_FILE}" "${LCM_FILE}" | grep -v -e "[-<>]" -c)"
+        if [ "$OUTDATED_SECTIONS" -gt 0 ]; then
           STATUS="${red}outdated.${normal}"
           DIFF_COUNT=$((DIFF_COUNT+1))
         else
           STATUS="${green}synced.${normal}"
         fi
 
-        if [ ${SHOW_DIFF} -eq 0 ] || [ $OUTDATED_SECTIONS -gt 0 ]; then
+        if [ "${SHOW_DIFF}" -eq 0 ] || [ "$OUTDATED_SECTIONS" -gt 0 ]; then
           mdlm_echo "- ${yellow}${LCM_FILE}${normal} (${LCM_LOCAL_NAME}) - ${STATUS}"
         fi
 
-        if [ ${SHOW_DIFF} -eq 1 ]; then
-          mdlm_original_diff ${ORIG_FILE} ${LCM_FILE}
+        if [ "${SHOW_DIFF}" -eq 1 ]; then
+          mdlm_original_diff "${ORIG_FILE}" "${LCM_FILE}"
         fi
       done
     else
