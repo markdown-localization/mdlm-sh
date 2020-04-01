@@ -176,7 +176,7 @@ mdlm_rm_locale() {
   
   for RM_FILE in $RM_ALL_FILES; do
     command echo -n "Delete ${yellow}${RM_FILE}${normal} (yes): "
-    read -r RM_CONFIRM
+    read RM_CONFIRM
     if [ -n "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]
     then
       mdlm_echo "- Skipped."
