@@ -224,7 +224,6 @@ mdlm_set_selected_header_file() {
   local SELECTED_FILE_NAME
   local NEW_HEADER_DEFAULT
   local HEADER_EXISTS
-  local SELECTED_FILE_ESCAPED
   
   SELECTED_FILE_NAME=${SELECTED_FILE//*\//}
 
