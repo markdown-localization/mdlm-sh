@@ -1,0 +1,28 @@
+name: unit-tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  bats:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install BATS
+      run: |
+        export BATS_DIR=$HOME/opt/bats
+        curl -L --fail -q -s https://github.com/bats-core/bats-core/archive/v1.1.0.tar.gz -o bats-core-release.tar.gz
+        tar zxvf bats-core-release.tar.gz
+        mkdir -p $BATS_DIR
+        cd bats-core-1.1.0/
+        ./install.sh $BATS_DIR
+
+    - name: Execute unit tests
+      run: |
+        $HOME/opt/bats/bin/bats test
+
