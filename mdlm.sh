@@ -24,8 +24,7 @@ MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-sp
 USE_COLORS="auto"
 
 mdlm_setup_colors() {
-  echo "term: ${TERM}"
-  if [ -n "${TERM}" ]; then
+  if test -t 1; then
     ncolors="$(tput colors)"
     if [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
       USE_COLORS="always"
