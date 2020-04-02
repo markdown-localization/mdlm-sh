@@ -1,6 +1,7 @@
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/markdown-localization/mdlm-sh)
-[![shellcheck](https://github.com/markdown-localization/mdlm-sh/workflows/shellcheck/badge.svg)](https://github.com/markdown-localization/mdlm-sh/actions?query=workflow:shellcheck)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3814/badge)](https://bestpractices.coreinfrastructure.org/projects/3814)
+[![linting](https://github.com/markdown-localization/mdlm-sh/workflows/linting/badge.svg)](https://github.com/markdown-localization/mdlm-sh/actions?query=workflow:linting)
+[![unit-tests](https://github.com/voitau/mdlm-sh/workflows/unit-tests/badge.svg)](https://github.com/markdown-localization/mdlm-sh/actions?query=workflow:unit-tests)
+[![CII Best Practices](unit-teststps://bestpractices.coreinfrastructure.org/projects/3814/badge)](https://bestpractices.coreinfrastructure.org/projects/3814)
 
 # Markdown Localization Manager
 
