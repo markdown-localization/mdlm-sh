@@ -8,7 +8,7 @@
 #
 # Functions:
 # - mdlm_* - custom functions.
-MDLM_VERSION="0.0.11"
+MDLM_VERSION="0.0.13"
 
 DEFAULT_LCM_LOCAL="English"
 

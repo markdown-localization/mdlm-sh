@@ -2,7 +2,7 @@
 
 { # this ensures the entire script is downloaded #
 
-MDLM_VERSION="0.0.11"
+MDLM_VERSION="0.0.13"
 MDLM_REMOTE_FILE="https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v${MDLM_VERSION}/mdlm.sh"
 
 mdlm_echo() {
@@ -61,7 +61,7 @@ mdlm_update_profile() {
 }
 
 mdlm_install() {
-  mdlm_echo "Installing Markdown localization manager."
+  mdlm_echo "Installing Markdown localization manager (Bash) ${MDLM_VERSION}"
   local INSTALL_DIR
   
   INSTALL_DIR="$(mdlm_install_dir)"
