@@ -1,4 +1,4 @@
-name: unit-testing
+name: unit-tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  shellcheck:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +24,5 @@ jobs:
 
     - name: Execute unit tests
       run: |
-        $BATS_DIR/bin/bats test
+        $HOME/opt/bats/bin/bats test
 
