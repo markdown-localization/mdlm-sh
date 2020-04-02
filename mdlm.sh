@@ -24,16 +24,18 @@ MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-sp
 USE_COLORS="auto"
 
 mdlm_setup_colors() {
-  ncolors="$(tput colors)"
-  if [ -n "${TERM}" ] && [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
-    USE_COLORS="always"
-    normal=$'\e[0m'
-    green=$(tput setaf 2)
-    red=$(tput setaf 1)
-    yellow=$(tput setaf 3)
-    blue=$(tput setaf 6)
-  else
-    USE_COLORS="never"
+  if [ -n "${TERM}" ]; then
+    ncolors="$(tput colors)"
+    if [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
+      USE_COLORS="always"
+      normal=$'\e[0m'
+      green=$(tput setaf 2)
+      red=$(tput setaf 1)
+      yellow=$(tput setaf 3)
+      blue=$(tput setaf 6)
+    else
+      USE_COLORS="never"
+    fi
   fi
 }
 
