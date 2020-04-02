@@ -15,7 +15,7 @@ jobs:
 
     - name: Install BATS
       run: |
-        apt-get install bats
+        sudo apt-get install bats
 
     - name: Execute unit tests
       run: |
