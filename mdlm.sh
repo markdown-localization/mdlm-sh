@@ -21,11 +21,23 @@ MDLM_IGNORE_END="<!-- @l10n:ignore end -->"
 
 MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
 
-normal=$'\e[0m'
-green=$(tput setaf 2)
-red=$(tput setaf 1)
-yellow=$(tput setaf 3)
-blue=$(tput setaf 6)
+USE_COLORS="auto"
+
+mdlm_setup_colors() {
+  if test -t 1; then
+    ncolors="$(tput colors)"
+    if [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
+      USE_COLORS="always"
+      normal=$'\e[0m'
+      green=$(tput setaf 2)
+      red=$(tput setaf 1)
+      yellow=$(tput setaf 3)
+      blue=$(tput setaf 6)
+    else
+      USE_COLORS="never"
+    fi
+  fi
+}
 
 mdlm_echo() {
   command printf %s\\n "$*" 2>/dev/null
@@ -268,7 +280,7 @@ mdlm_update_all_headers() {
 }
 
 mdlm_original_diff() {
-  diff --color -B \
+  diff --color="${USE_COLORS}" -B \
     <(grep -v "${MDLM_HEADER}" "${2}" \
       | sed -e "/${MDLM_P_CLOSE}/,/${MDLM_P_OPEN}/d" -e "/${MDLM_P_OPEN}/d" -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d") \
     <(grep -v "${MDLM_HEADER}" "${1}" | sed -e "/${MDLM_IGNORE_START}/,/${MDLM_IGNORE_END}/d")
@@ -365,6 +377,8 @@ mdlm_help() {
 }
 
 mdlm() {
+  mdlm_setup_colors
+
   if [ $# -lt 1 ]; then
     mdlm help
     return

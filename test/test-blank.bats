@@ -9,7 +9,6 @@ teardown() {
 }
 
 @test "mdlm - with no arguments" {
-  $mdlm
   run $mdlm
   [ $status -eq 0 ]
   [ $(expr "$output" : "Markdown Localization Manager (Bash) [0-9][0-9.]*") -ne 0 ]
