@@ -25,7 +25,7 @@ USE_COLORS="auto"
 
 mdlm_setup_colors() {
   ncolors="$(tput colors)"
-  if tty -s && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+  if [ -n "${TERM}" ] && [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
     USE_COLORS="always"
     normal=$'\e[0m'
     green=$(tput setaf 2)
