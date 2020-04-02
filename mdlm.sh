@@ -22,15 +22,10 @@ MDLM_IGNORE_END="<!-- @l10n:ignore end -->"
 MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
 
 USE_COLORS="auto"
-normal=""
-green=""
-red=""
-yellow=""
-blue=""
 
 mdlm_setup_colors() {
   ncolors="$(tput colors)"
-  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+  if tty -s && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
     USE_COLORS="always"
     normal=$'\e[0m'
     green=$(tput setaf 2)
