@@ -11,10 +11,10 @@ Minimal reference implenentation of [Markdown Localization Specification](https:
 
 To install or update mdlm, you should run the install script. To do that, you may either download and run the script manually, or use the following cURL or Wget command:
 ```sh
-curl -o- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.13/install.sh | bash
+curl -o- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.14/install.sh | bash
 ```
 ```sh
-wget -qO- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.13/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v0.0.14/install.sh | bash
 ```
 Running either of the above commands downloads a script and runs it. The script copies mdlm script to `~/.mdlm`, and attempts to add the source lines from the snippet below to the correct profile file (`~/.bash_profile`, or `~/.bashrc`).
 
@@ -67,7 +67,7 @@ As a result, new README-eo.md file will be created. Localization switcher header
 ## Remove a locale
 
 ```
-$ mdlm rm eo--yes
+$ mdlm rm eo --yes
 Removing localization files for locale - "eo (Esperanto) - Esperanto":
 Removing README-eo.md.
 - Removed.
