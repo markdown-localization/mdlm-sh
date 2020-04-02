@@ -21,10 +21,9 @@ jobs:
         mkdir -p $BATS_DIR
         cd bats-core-1.1.0/
         ./install.sh $BATS_DIR
-        $HOME/opt/bats/bin/bats --version
-
 
     - name: Execute unit tests
       run: |
         $HOME/opt/bats/bin/bats --version
+        $HOME/opt/bats/bin/bats test/
 
