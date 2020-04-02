@@ -24,5 +24,6 @@ jobs:
 
     - name: Execute unit tests
       run: |
-        $HOME/opt/bats/bin/bats test
+        export TERM=xterm-256color
+        $HOME/opt/bats/bin/bats test/
 

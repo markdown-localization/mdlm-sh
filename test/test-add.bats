@@ -34,6 +34,7 @@ teardown() {
   run $mdlm add --yes it
   run $mdlm add --yes fr
 
+  diff "${ORIG_FILE}" "${ORIG_FILE_EXP_IT_FR}"
   run diff "${ORIG_FILE}" "${ORIG_FILE_EXP_IT_FR}"
   [ $status -eq 0 ]
 
