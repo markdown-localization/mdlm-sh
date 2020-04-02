@@ -9,7 +9,6 @@ teardown() {
 }
 
 @test "mdlm status" {
-  $mdlm status
   run $mdlm status
   [ $status -eq 0 ]
   [ "${lines[0]}" == 'Localization status for all locales.' ]
