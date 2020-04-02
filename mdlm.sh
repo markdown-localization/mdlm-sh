@@ -8,7 +8,7 @@
 #
 # Functions:
 # - mdlm_* - custom functions.
-MDLM_VERSION="0.0.10"
+MDLM_VERSION="0.0.11"
 
 DEFAULT_LCM_LOCAL="English"
 
@@ -56,10 +56,10 @@ mdlm_validate_args_count() {
 }
 
 mdlm_version() {
-  mdlm_echo "Markdown Localization Manager - Bash (v${MDLM_VERSION})"
+  mdlm_echo "Markdown Localization Manager (Bash) ${MDLM_VERSION}"
 }
 
-mdlm_list_available_locales() {
+mdlm_search_available_locales() {
   local PATTERN="${1}"
   local LCM_LIST
   LCM_LIST="$(list_locales)"
@@ -74,7 +74,7 @@ mdlm_list_available_locales() {
 }
 
 mdlm_find_one_locale() {
-  mdlm_list_available_locales "^${1}[|]" | head -n 1
+  mdlm_search_available_locales "^${1}[|]" | head -n 1
 }
 
 mdlm_get_locale_suffix() {
@@ -91,15 +91,6 @@ mdlm_validate_locale() {
 
   if [ -z "${1}" ]; then
     mdlm_echo "No matching locales found."
-    exit 1
-  fi
-
-  local LCM_CONFIRM
-  command echo -n "Please confirm locale - \"${blue}${LCM}${normal}\" (yes): "
-  read -r LCM_CONFIRM
-
-  if [ -n "$LCM_CONFIRM" ] && [ ! "$LCM_CONFIRM" = "yes" ] && [ ! "$LCM_CONFIRM" = "y" ]; then
-    mdlm_echo "Please choose another locale. Exiting."
     exit 1
   fi
 }
@@ -130,31 +121,39 @@ mdlm_copy_original_to_localized_file() {
 }
 
 mdlm_add_locale() {
-  mdlm_echo "Creating new localization files."
+  local YES_PROMPT
   local LCM
   local LCM_SUFFIX
   local ORIG_FILE
   local LCM_FILE
   local COUNT=0
 
+  YES_PROMPT="${2}"
+
   LCM="$(mdlm_find_one_locale "${1}")"
   mdlm_validate_locale "${LCM}"
-  
+  mdlm_echo "Creating new localization files for locale - \"${blue}${LCM}${normal}\":"
   LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
 
   for ORIG_FILE in $(mdlm_find_original_files); do
     LCM_FILE=$(mdlm_get_localized_file_name "${ORIG_FILE}" "${LCM_SUFFIX}")
 
-    command echo -n "Localize ${yellow}${ORIG_FILE}${normal} (${yellow}${LCM_FILE}${normal})? (yes): "
-    read -r LCM_FILE_CONFIRM
-    if [ -n "${LCM_FILE_CONFIRM}" ] && [ ! "${LCM_FILE_CONFIRM}" = "yes" ] && [ ! "${LCM_FILE_CONFIRM}" = "y" ]; then
-      mdlm_echo "- Skipped."
+    command printf "Creating ${yellow}${LCM_FILE}${normal}."
+    if [ "${YES_PROMPT}" -eq 0 ]; then
+      command echo -n " Confirm? [Y/n] "
+      read -r LCM_FILE_CONFIRM
+      if [ -n "${LCM_FILE_CONFIRM}" ] && [ ! "${LCM_FILE_CONFIRM}" = "yes" ] && [ ! "${LCM_FILE_CONFIRM}" = "y" ]; then
+        mdlm_echo "- Skipped."
+        break
+      fi
     else
-      mdlm_copy_original_to_localized_file "${ORIG_FILE}" "${LCM_FILE}"
-
-      COUNT=$((COUNT+1))
-      mdlm_echo "- Created."
+      mdlm_echo
     fi
+
+    mdlm_copy_original_to_localized_file "${ORIG_FILE}" "${LCM_FILE}"
+
+    COUNT=$((COUNT+1))
+    mdlm_echo "- Created."
   done
 
   mdlm_update_all_headers
@@ -162,32 +161,41 @@ mdlm_add_locale() {
 }
 
 mdlm_rm_locale() {
-  mdlm_echo "Removing localization files."
+  local YES_PROMPT
   local LCM
   local LCM_SUFFIX
   local RM_ALL_FILES
   local RM_FILE
-  
+
+  YES_PROMPT="${2}"
+
   LCM="$(mdlm_find_one_locale "${1}")"
   mdlm_validate_locale "${LCM}"
-
+  mdlm_echo "Removing localization files for locale - \"${blue}${LCM}${normal}\":"
   LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
+
   RM_ALL_FILES="$(find . -name "*-${LCM_SUFFIX}.md" -printf '%P\n')"
   
   for RM_FILE in $RM_ALL_FILES; do
-    command echo -n "Delete ${yellow}${RM_FILE}${normal} (yes): "
-    read -r RM_CONFIRM
-    if [ -n "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]
-    then
-      mdlm_echo "- Skipped."
+    command echo -n "Removing ${yellow}${RM_FILE}${normal}."
+    if [ "${YES_PROMPT}" -eq 0 ]; then
+      command echo -n " Confirm? [Y/n] "
+      read -r RM_CONFIRM
+      if [ -n "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]; then
+        mdlm_echo "- Skipped."
+        break
+      fi
     else
-      command rm "${RM_FILE}"
-      mdlm_echo "- Removed."
+      mdlm_echo
     fi
+
+    command rm "${RM_FILE}"
+    mdlm_echo "- Removed."
+
   done
 
   mdlm_update_all_headers
-  mdlm_echo "Localization files deleted."
+  mdlm_echo "Localization files removed."
 }
 
 mdlm_create_header() {
@@ -281,7 +289,7 @@ mdlm_status() {
   if [ -n "${LCM_PATTERN}" ]; then
     LCM="$(mdlm_find_one_locale "${LCM_PATTERN}")"
     if [ -n "${LCM}" ]; then
-      mdlm_echo "Localization status for: ${LCM}."
+      mdlm_echo "Localization status for - ${blue}${LCM}${normal}:"
     else
       mdlm_echo "No matching locale found. Localization status for all locales."
     fi
@@ -343,13 +351,17 @@ mdlm_status() {
 
 mdlm_help() {
   mdlm_echo "$(mdlm_version)"
+  mdlm_echo
+  mdlm_echo "Usage:"
   mdlm_echo "  mdlm help                 Show this message"
   mdlm_echo "  mdlm version              Print out the installed version of mdlm"
-  mdlm_echo "  mdlm ls [<pattern>]       List all available locales, matching a given <pattern> if provided"
+  mdlm_echo "  mdlm search [<pattern>]   List all available locales, matching a given <pattern> if provided"
   mdlm_echo "  mdlm add <locale>         Create localization files for given <locale>"
+  mdlm_echo "    --yes                   Automatic yes to prompts"
   mdlm_echo "  mdlm rm <locale>          Remove all localization files for given <locale>"
+  mdlm_echo "    --yes                   Automatic yes to prompts"
   mdlm_echo "  mdlm status [<locale>]    Check synchronization status between original and localized versions, for a given <locale> if provided"
-  mdlm_echo "  mdlm diff [<locale>]     Show synchronization diff between original and localized versions, for a given <locale> if provided"
+  mdlm_echo "  mdlm diff [<locale>]      Show synchronization diff between original and localized versions, for a given <locale> if provided"
 }
 
 mdlm() {
@@ -367,19 +379,62 @@ mdlm() {
       mdlm_help
     ;;
     "version" | "--version")
+      mdlm_validate_args_count 0 0 $#
       mdlm_version
     ;;
-    "ls" | "list")
+    "search")
       mdlm_validate_args_count 0 1 $#
-      mdlm_list_available_locales "${1}"
+      mdlm_search_available_locales "${1}"
     ;;
     "add")
-      mdlm_validate_args_count 1 1 $#
-      mdlm_add_locale "${1}"
+      local ARGS_COUNT
+      local YES_PROMPT
+      local LCM
+
+      ARGS_COUNT=$#
+      YES_PROMPT=0
+      while [ $# -ne 0 ]
+      do
+        case "$1" in
+          "-y" | "--yes")
+            YES_PROMPT=1
+            ARGS_COUNT=$((ARGS_COUNT-1))
+            shift
+          ;;
+          *)
+            LCM="$1"
+            shift
+          ;;
+        esac
+      done
+
+      mdlm_validate_args_count 1 1 ${ARGS_COUNT}
+      mdlm_add_locale "${LCM}" "${YES_PROMPT}"
     ;;
     "rm")
-      mdlm_validate_args_count 1 1 $#
-      mdlm_rm_locale "${1}"
+      local ARGS_COUNT
+      local YES_PROMPT
+      local LCM
+
+      ARGS_COUNT=$#
+      YES_PROMPT=0
+      while [ $# -ne 0 ]
+      do
+        case "$1" in
+          "-y" | "--yes")
+            YES_PROMPT=1
+            ARGS_COUNT=$((ARGS_COUNT-1))
+            shift
+          ;;
+          *)
+            LCM="$1"
+            shift
+          ;;
+        esac
+      done
+
+      mdlm_validate_args_count 1 1 ${ARGS_COUNT}
+      mdlm_rm_locale "${LCM}" "${YES_PROMPT}"
     ;;
     "status")
       mdlm_validate_args_count 0 1 $#
