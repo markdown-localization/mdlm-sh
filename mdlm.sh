@@ -278,7 +278,7 @@ mdlm_get_file_localizations() {
   local ORIG_FILE=${1}
   local LCM=${2}
   
-  find . -path "./${ORIG_FILE//.md/-*.md}" -printf '%P\n' | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
+  find . -path "./${ORIG_FILE//.md/-*.md}" -printf '%P\n'| sort | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
 }
 
 mdlm_status() {
