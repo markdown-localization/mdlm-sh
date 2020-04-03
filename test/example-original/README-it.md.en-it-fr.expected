@@ -1,16 +1,16 @@
 [English](README.md) | [Français](README-fr.md) | **[Italiano](README-it.md)** | *[Add](https://github.com/markdown-localization/markdown-localization-spec#workflow)* <!-- l10n:select -->
 
-<!-- l10n:section
+<!-- l10n:p
 ## Example A
 
 Here is a text of example.
-l10n:section -->
+l10n:p -->
 TBD
 
-<!-- l10n:section
+<!-- l10n:p
 ### References
 
 Some references here.
-l10n:section -->
+l10n:p -->
 TBD
 

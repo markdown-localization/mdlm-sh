@@ -4,20 +4,20 @@
 ![l10n-sync-es](https://github.com/markdown-localization/markdown-localization-spec/workflows/l10n-sync-es/badge.svg)
 <!-- l10n:ignore end -->
 
-<!-- l10n:section
+<!-- l10n:p
 ## Example A
 
 Here is an outdated text of example.
-l10n:section -->
+l10n:p -->
 ## Ejemplo A
 
 Aquí hay un texto de ejemplo. Traducido con Google Translate.
 
-<!-- l10n:section
+<!-- l10n:p
 ### References
 
 Some references here.
-l10n:section -->
+l10n:p -->
 ### Referencias
 
 Algunas referencias aquí.

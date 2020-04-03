@@ -8,14 +8,14 @@
 #
 # Functions:
 # - mdlm_* - custom functions.
-MDLM_VERSION="0.0.15"
+MDLM_VERSION="0.0.16"
 
 DEFAULT_LCM_LOCAL="English"
 
 MDLM_HEADER="<!-- l10n:select -->"
 
-MDLM_SECTION_OPEN="<!-- l10n:section"
-MDLM_SECTION_CLOSE="l10n:section -->"
+MDLM_P_OPEN="<!-- l10n:p"
+MDLM_P_CLOSE="l10n:p -->"
 MDLM_P_TBD="TBD"
 
 MDLM_IGNORE_START="<!-- l10n:ignore start -->"
@@ -130,7 +130,7 @@ mdlm_copy_original_to_localized_file() {
   command echo "${HEADER}" > "${LCM_FILE}"
   command grep -v "${MDLM_HEADER}" "${ORIG_FILE}" \
     | sed -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d" \
-    | awk -v RS="(^|\n)#" -v popen="${MDLM_SECTION_OPEN}" -v pclose="${MDLM_SECTION_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
+    | awk -v RS="(^|\n)#" -v popen="${MDLM_P_OPEN}" -v pclose="${MDLM_P_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
       '{ if ($0) print popen "\n#" $0 pclose "\n" ptbd "\n"}' >> "${LCM_FILE}"
 }
 
@@ -285,8 +285,8 @@ mdlm_original_diff() {
   diff --color="${USE_COLORS}" -B \
     <(grep -v "${MDLM_HEADER}" "${2}" \
       | sed \
-        -e "/${MDLM_SECTION_CLOSE}/,/${MDLM_SECTION_OPEN}/d" \
-        -e "/${MDLM_SECTION_OPEN}/d" \
+        -e "/${MDLM_P_CLOSE}/,/${MDLM_P_OPEN}/d" \
+        -e "/${MDLM_P_OPEN}/d" \
         -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d") \
     <(grep -v "${MDLM_HEADER}" "${1}" \
       | sed \
