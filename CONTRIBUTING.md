@@ -13,3 +13,10 @@ Coding style:
 * please use 2 spaces indentation
 * split into reasobly small functions
 * use local variables
+
+Code analysis
+* use shellcheck to perform static code analysis
+
+Unit testing
+* all user facing commands and argument variations have to be unit tested with bats
+* each command that has an input prompt, has to have an option to assume default value (e.g. --yes)
