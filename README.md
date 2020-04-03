@@ -7,6 +7,8 @@
 
 Minimal reference implenentation of [Markdown Localization Specification](https://github.com/markdown-localization/markdown-localization-spec)
 
+![mdlm demo](https://raw.githubusercontent.com/markdown-localization/mdlm-sh/assets/mdlm-demo.gif)
+
 # Installing and Updating
 
 To install or update mdlm, you should run the install script. To do that, you may either download and run the script manually, or use the following cURL or Wget command:
