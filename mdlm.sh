@@ -12,12 +12,14 @@ MDLM_VERSION="0.0.14"
 
 DEFAULT_LCM_LOCAL="English"
 
-MDLM_HEADER="<!-- @l10n:h -->"
-MDLM_P_OPEN="<!-- @l10n:p"
-MDLM_P_CLOSE="@l10n:p -->"
+MDLM_HEADER="<!-- l10n:select -->"
+
+MDLM_SECTION_OPEN="<!-- l10n:section"
+MDLM_SECTION_CLOSE="l10n:section -->"
 MDLM_P_TBD="TBD"
-MDLM_IGNORE_START="<!-- @l10n:ignore start -->"
-MDLM_IGNORE_END="<!-- @l10n:ignore end -->"
+
+MDLM_IGNORE_START="<!-- l10n:ignore start -->"
+MDLM_IGNORE_END="<!-- l10n:ignore end -->"
 
 MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
 
@@ -128,7 +130,7 @@ mdlm_copy_original_to_localized_file() {
   command echo "${HEADER}" > "${LCM_FILE}"
   command grep -v "${MDLM_HEADER}" "${ORIG_FILE}" \
     | sed -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d" \
-    | awk -v RS="(^|\n)#" -v popen="${MDLM_P_OPEN}" -v pclose="${MDLM_P_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
+    | awk -v RS="(^|\n)#" -v popen="${MDLM_SECTION_OPEN}" -v pclose="${MDLM_SECTION_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
       '{ if ($0) print popen "\n#" $0 pclose "\n" ptbd "\n"}' >> "${LCM_FILE}"
 }
 
@@ -282,8 +284,13 @@ mdlm_update_all_headers() {
 mdlm_original_diff() {
   diff --color="${USE_COLORS}" -B \
     <(grep -v "${MDLM_HEADER}" "${2}" \
-      | sed -e "/${MDLM_P_CLOSE}/,/${MDLM_P_OPEN}/d" -e "/${MDLM_P_OPEN}/d" -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d") \
-    <(grep -v "${MDLM_HEADER}" "${1}" | sed -e "/${MDLM_IGNORE_START}/,/${MDLM_IGNORE_END}/d")
+      | sed \
+        -e "/${MDLM_SECTION_CLOSE}/,/${MDLM_SECTION_OPEN}/d" \
+        -e "/${MDLM_SECTION_OPEN}/d" \
+        -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d") \
+    <(grep -v "${MDLM_HEADER}" "${1}" \
+      | sed \
+        -e "/${MDLM_IGNORE_START}/,/${MDLM_IGNORE_END}/d")
 }
 
 mdlm_get_file_localizations() {
