@@ -21,7 +21,7 @@ MDLM_P_TBD="TBD"
 MDLM_IGNORE_START="<!-- l10n:ignore start -->"
 MDLM_IGNORE_END="<!-- l10n:ignore end -->"
 
-MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
+MDLM_ADD_LINK="https://github.com/markdown-localization/mdlm-spec#workflow"
 
 USE_COLORS="auto"
 
