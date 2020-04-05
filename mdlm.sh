@@ -21,7 +21,7 @@ MDLM_P_TBD="TBD"
 MDLM_IGNORE_START="<!-- l10n:ignore start -->"
 MDLM_IGNORE_END="<!-- l10n:ignore end -->"
 
-MDLM_ADD_LINK="https://github.com/markdown-localization/markdown-localization-spec#workflow"
+MDLM_ADD_LINK="https://github.com/markdown-localization/mdlm-spec#workflow"
 
 USE_COLORS="auto"
 
@@ -158,7 +158,7 @@ mdlm_add_locale() {
       read -r LCM_FILE_CONFIRM
       if [ -n "${LCM_FILE_CONFIRM}" ] && [ ! "${LCM_FILE_CONFIRM}" = "yes" ] && [ ! "${LCM_FILE_CONFIRM}" = "y" ]; then
         mdlm_echo "- Skipped."
-        break
+        continue
       fi
     else
       mdlm_echo
@@ -197,7 +197,7 @@ mdlm_rm_locale() {
       read -r RM_CONFIRM
       if [ -n "$RM_CONFIRM" ] && [ ! "$RM_CONFIRM" = "yes" ] && [ ! "$RM_CONFIRM" = "y" ]; then
         mdlm_echo "- Skipped."
-        break
+        continue
       fi
     else
       mdlm_echo

@@ -5,7 +5,7 @@
 
 # Markdown Localization Manager
 
-Minimal reference implenentation of [Markdown Localization Specification](https://github.com/markdown-localization/markdown-localization-spec)
+Minimal reference implenentation of [Markdown Localization Specification](https://github.com/markdown-localization/mdlm-spec)
 
 ![mdlm demo](https://raw.githubusercontent.com/markdown-localization/mdlm-sh/assets/mdlm-demo.gif)
 
