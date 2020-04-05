@@ -130,8 +130,16 @@ mdlm_copy_original_to_localized_file() {
   command echo "${HEADER}" > "${LCM_FILE}"
   command grep -v "${MDLM_HEADER}" "${ORIG_FILE}" \
     | sed -e "/$MDLM_IGNORE_START/,/$MDLM_IGNORE_END/d" \
-    | awk -v RS="(^|\n)#" -v popen="${MDLM_P_OPEN}" -v pclose="${MDLM_P_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
-      '{ if ($0) print popen "\n#" $0 pclose "\n" ptbd "\n"}' >> "${LCM_FILE}"
+    | awk -v popen="${MDLM_P_OPEN}" -v pclose="${MDLM_P_CLOSE}" -v ptbd="${MDLM_P_TBD}" \
+      'BEGIN {
+        RS="(^|\n)#";
+        FS="\n";
+      }
+      {
+          if ($0) {
+            print popen "\n#" $0 pclose "\n\n#" $1 "\n\n" ptbd "\n"
+          }
+      }' >> "${LCM_FILE}"
 }
 
 mdlm_add_locale() {

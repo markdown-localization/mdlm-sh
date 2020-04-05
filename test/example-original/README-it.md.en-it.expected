@@ -5,6 +5,9 @@
 
 Here is a text of example.
 l10n:p -->
+
+## Example A
+
 TBD
 
 <!-- l10n:p
@@ -12,5 +15,8 @@ TBD
 
 Some references here.
 l10n:p -->
+
+### References
+
 TBD
 
