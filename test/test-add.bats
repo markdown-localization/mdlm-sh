@@ -38,6 +38,7 @@ teardown() {
   run diff "${ORIG_FILE}" "${ORIG_FILE_EXP_IT_FR}"
   [ $status -eq 0 ]
 
+  diff "${LCM_FILE_IT}" "${LCM_FILE_IT_EXP_EN_IT_FR}"
   run diff "${LCM_FILE_IT}" "${LCM_FILE_IT_EXP_EN_IT_FR}"
   [ $status -eq 0 ]
 
