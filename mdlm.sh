@@ -8,7 +8,7 @@
 #
 # Functions:
 # - mdlm_* - custom functions.
-MDLM_VERSION="0.0.17"
+MDLM_VERSION="0.0.18"
 
 DEFAULT_LCM_LOCAL="English"
 
@@ -21,7 +21,7 @@ MDLM_P_TBD="TBD"
 MDLM_IGNORE_START="<!-- l10n:ignore start -->"
 MDLM_IGNORE_END="<!-- l10n:ignore end -->"
 
-MDLM_ADD_LINK="https://github.com/markdown-localization/mdlm-spec#workflow"
+# MDLM_ADD_LINK="https://github.com/markdown-localization/mdlm-spec#workflow"
 
 USE_COLORS="auto"
 
@@ -244,7 +244,7 @@ mdlm_create_header() {
     HEADER="${HEADER} | [${LCM_LOCAL_NAME}](${LCM_FILE_NAME})"
   done
 
-  echo "${HEADER} | *[Add](${MDLM_ADD_LINK//\//\\\/})* ${MDLM_HEADER}"
+  echo "${HEADER} ${MDLM_HEADER}"
 }
 
 mdlm_set_selected_header_file() {
