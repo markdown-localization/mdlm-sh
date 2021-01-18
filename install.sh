@@ -2,7 +2,7 @@
 
 { # this ensures the entire script is downloaded #
 
-MDLM_VERSION="0.0.19"
+MDLM_VERSION="0.0.20"
 MDLM_REMOTE_FILE="https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v${MDLM_VERSION}/mdlm.sh"
 
 mdlm_echo() {
@@ -23,10 +23,14 @@ mdlm_detect_profile() {
   local DETECTED_PROFILE
   DETECTED_PROFILE=''
 
-  if [ -f "$HOME/.bashrc" ]; then
-    DETECTED_PROFILE="$HOME/.bashrc"
-  elif [ -f "$HOME/.bash_profile" ]; then
-    DETECTED_PROFILE="$HOME/.bash_profile"
+  if [ -n "${BASH_VERSION-}" ]; then
+    if [ -f "$HOME/.bashrc" ]; then
+      DETECTED_PROFILE="$HOME/.bashrc"
+    elif [ -f "$HOME/.bash_profile" ]; then
+      DETECTED_PROFILE="$HOME/.bash_profile"
+    fi
+  elif [ -n "${ZSH_VERSION-}" ]; then
+    DETECTED_PROFILE="$HOME/.zshrc"
   fi
 
   if [ -n "$DETECTED_PROFILE" ]; then
@@ -44,7 +48,7 @@ mdlm_update_profile() {
   SOURCE_STR="\\nexport MDLM_DIR=\"${PROFILE_INSTALL_DIR}\"\\nalias mdlm='\$MDLM_DIR/mdlm.sh'\\n"
 
   if [ -z "${MDLM_PROFILE-}" ] ; then
-    echo "=> Profile not found. Tried ~/.bashrc and ~/.bash_profile."
+    echo "=> Profile not found. Tried ~/.bashrc, ~/.bash_profile and ~/.zshrc"
     echo "=> Create one of them and run this script again"
     echo "   OR"
     echo "=> Append the following lines to the correct file yourself:"
