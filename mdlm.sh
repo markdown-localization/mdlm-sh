@@ -105,6 +105,7 @@ mdlm_validate_locale() {
 }
 
 mdlm_find_original_files() {
+  # shellcheck disable=SC2156
   command find . -name "*.md" ! -name "*-[[:alnum:]]*.md" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; | sort
 }
 
@@ -191,6 +192,7 @@ mdlm_rm_locale() {
   mdlm_echo "Removing localization files for locale - \"${blue}${LCM}${normal}\":"
   LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
 
+  # shellcheck disable=SC2156
   RM_ALL_FILES="$(find . -name "*-${LCM_SUFFIX}.md" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; )"
   
   for RM_FILE in $RM_ALL_FILES; do
@@ -302,6 +304,7 @@ mdlm_get_file_localizations() {
   local ORIG_FILE=${1}
   local LCM=${2}
   
+  # shellcheck disable=SC2156
   find . -path "./${ORIG_FILE//.md/-*.md}" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; | sort | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
 }
 
