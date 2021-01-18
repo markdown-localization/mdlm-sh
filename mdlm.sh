@@ -23,20 +23,15 @@ MDLM_IGNORE_END="<!-- l10n:ignore end -->"
 
 # MDLM_ADD_LINK="https://github.com/markdown-localization/mdlm-spec#workflow"
 
-USE_COLORS="auto"
-
 mdlm_setup_colors() {
   if test -t 1; then
     ncolors="$(tput colors)"
     if [ -n "${ncolors}" ] && [ "${ncolors}" -ge 8 ]; then
-      USE_COLORS="always"
       normal=$'\e[0m'
       green=$(tput setaf 2)
       red=$(tput setaf 1)
       yellow=$(tput setaf 3)
       blue=$(tput setaf 6)
-    else
-      USE_COLORS="never"
     fi
   fi
 }
@@ -110,7 +105,7 @@ mdlm_validate_locale() {
 }
 
 mdlm_find_original_files() {
-  command find . -name "*.md" ! -name "*-[[:alnum:]]*.md" -printf '%P\n' | sort
+  command find . -name "*.md" ! -name "*-[[:alnum:]]*.md" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; | sort
 }
 
 mdlm_get_localized_file_name() {
@@ -196,7 +191,7 @@ mdlm_rm_locale() {
   mdlm_echo "Removing localization files for locale - \"${blue}${LCM}${normal}\":"
   LCM_SUFFIX="$(mdlm_get_locale_suffix "${LCM}")"
 
-  RM_ALL_FILES="$(find . -name "*-${LCM_SUFFIX}.md" -printf '%P\n')"
+  RM_ALL_FILES="$(find . -name "*-${LCM_SUFFIX}.md" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; )"
   
   for RM_FILE in $RM_ALL_FILES; do
     command echo -n "Removing ${yellow}${RM_FILE}${normal}."
@@ -254,16 +249,18 @@ mdlm_set_selected_header_file() {
   local SELECTED_FILE_NAME
   local NEW_HEADER_DEFAULT
   local HEADER_EXISTS
-  
+
   SELECTED_FILE_NAME=${SELECTED_FILE//*\//}
 
   # shellcheck disable=SC2001
   NEW_HEADER_DEFAULT="$(echo "${HEADER}" | sed -e "s|\([^ ]*\)${SELECTED_FILE_NAME})|**\1${SELECTED_FILE_NAME})**|g")"
   HEADER_EXISTS="$(grep -c "${MDLM_HEADER}" "${SELECTED_FILE}")"
   if [ "${HEADER_EXISTS}" -eq 1 ]; then
-    command sed -i "s/.*${MDLM_HEADER}.*/${NEW_HEADER_DEFAULT}/" "${SELECTED_FILE}"
+    command sed "${sedi[@]}" "s/.*${MDLM_HEADER}.*/${NEW_HEADER_DEFAULT}/" "${SELECTED_FILE}"
   else
-    command sed -i "1 i\\${NEW_HEADER_DEFAULT}" "${SELECTED_FILE}"
+    command sed "${sedi[@]}" "1 i\\
+${NEW_HEADER_DEFAULT}
+    " "${SELECTED_FILE}"
   fi
 }
 
@@ -284,13 +281,13 @@ mdlm_update_all_headers() {
         mdlm_set_selected_header_file "${HEADER}" "${LCM_FILE}"
       done
     else
-      command sed -i "/.*${MDLM_HEADER}.*/d" "${ORIG_FILE}"
+      command sed "${sedi[@]}" "/.*${MDLM_HEADER}.*/d" "${ORIG_FILE}"
     fi
   done
 }
 
 mdlm_original_diff() {
-  diff --color="${USE_COLORS}" -B \
+  diff -B \
     <(grep -v "${MDLM_HEADER}" "${2}" \
       | sed \
         -e "/${MDLM_P_CLOSE}/,/${MDLM_P_OPEN}/d" \
@@ -305,7 +302,7 @@ mdlm_get_file_localizations() {
   local ORIG_FILE=${1}
   local LCM=${2}
   
-  find . -path "./${ORIG_FILE//.md/-*.md}" -printf '%P\n'| sort | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
+  find . -path "./${ORIG_FILE//.md/-*.md}" -exec sh -c "echo {} | sed -e 's/^\.\///g'" \; | sort | sed -e 's/[^-]*-//' -e 's/\.md//' | grep "${LCM}"
 }
 
 mdlm_status() {
@@ -392,6 +389,11 @@ mdlm_help() {
 }
 
 mdlm() {
+  sedi=(-i)
+  case "$(uname)" in
+    Darwin*) sedi=(-i "")
+  esac
+
   mdlm_setup_colors
 
   if [ $# -lt 1 ]; then
