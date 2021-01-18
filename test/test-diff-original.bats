@@ -10,7 +10,6 @@ teardown() {
 }
 
 @test "mdlm diff - with single original file" {
-  ls
   run $mdlm diff
   [ $status -eq 0 ]
   [ "${lines[0]}" == 'Localization status for all locales.' ]
