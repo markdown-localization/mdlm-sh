@@ -2,7 +2,7 @@
 
 { # this ensures the entire script is downloaded #
 
-MDLM_VERSION="0.0.18"
+MDLM_VERSION="0.0.19"
 MDLM_REMOTE_FILE="https://raw.githubusercontent.com/markdown-localization/mdlm-sh/v${MDLM_VERSION}/mdlm.sh"
 
 mdlm_echo() {
